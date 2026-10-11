@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SecureCore | Laboratory Zone Hierarchy</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+ <div class="brand">SecureCore<small>LABORATORY ZONE HIERARCHY &middot; MODULE 4: TREES</small></div>
+ <nav id="nav">
+  <button data-t="zones" class="on">Zone hierarchy</button><button data-t="people">Researchers</button><button data-t="verify">Verify access</button><button data-t="cmp">BST vs AVL</button>
+ </nav>
+</header>
+<main>
+<div class="lock" id="lockbar">Emergency lockdown is active. Every access request is denied until it is disabled.</div>
+
+<section id="zones" class="on">
+ <span class="tag">BIOMEDICAL RESEARCH FACILITY</span><h1>Laboratory zone hierarchy</h1>
+ <p class="s">A general tree models parent&ndash;child zones. A child zone sits inside its parent, and each zone has a minimum clearance level.</p>
+ <div class="stats"><div class="stat"><b id="sz">0</b><span>Zones (nodes)</span></div><div class="stat"><b id="sd">0</b><span>Tree depth</span></div><div class="stat"><b id="sl">0</b><span>Leaf zones</span></div><div class="stat"><b id="sp">0</b><span>Researchers</span></div></div>
+ <div class="grid">
+  <div class="card"><h2>Zone tree</h2><p class="s">Add a subzone under any zone, or remove a zone with its whole subtree.</p><ul class="t" id="ztree"></ul></div>
+  <div class="card"><h2>Add zone</h2>
+   <div class="row"><input id="zn" placeholder="Zone name"></div>
+   <div class="row"><select id="zp"></select><select id="zl"><option value="1">Level 1 - General</option><option value="2">Level 2 - Restricted</option><option value="3">Level 3 - Secure</option><option value="4">Level 4 - Maximum</option></select></div>
+   <div class="row"><button class="b" id="zadd">+ Add zone</button></div>
+   <h2 style="margin-top:18px">Traversals</h2>
+   <p class="s">Preorder visits a zone before its subzones. Postorder visits subzones first.</p>
+   <div class="note"><b>Preorder:</b> <span id="pre"></span></div><div class="note"><b>Postorder:</b> <span id="post"></span></div>
+   <div class="row" style="margin-top:14px"><button class="b r" id="lockbtn">Enable emergency lockdown</button></div>
+  </div>
+ </div>
+</section>
+
+<section id="people">
+ <span class="tag">PERSONNEL INDEX</span><h1>Researcher directory</h1>
+ <p class="s">Records are stored in an AVL tree keyed by researcher ID, so lookup stays O(log n) even when IDs arrive in sorted order.</p>
+ <div class="card"><div class="row"><input id="pn" placeholder="Full name"><input id="pi" type="number" placeholder="Researcher ID"><select id="pc"><option value="1">Clearance 1</option><option value="2">Clearance 2</option><option value="3" selected>Clearance 3</option><option value="4">Clearance 4</option></select><button class="b" id="padd">+ Add researcher</button><button class="b g" id="pbulk">+ Add 5 sequential IDs</button></div><div class="note" id="pmsg"></div></div>
+ <div class="card scroll" style="margin-top:16px"><table><thead><tr><th>RESEARCHER</th><th>ID</th><th>CLEARANCE</th><th>GRANTED ZONES</th><th>DENIED</th><th>STATUS</th><th>MANAGE</th></tr></thead><tbody id="ptb"></tbody></table></div>
+</section>
+
+<section id="verify">
+ <span class="tag">ACCESS DECISION</span><h1>Verify zone access</h1>
+ <p class="s">Position in the hierarchy is only one input. The decision also checks status, grants, denies, clearance level and lockdown.</p>
+ <div class="grid">
+  <div class="card"><h2>Access request</h2>
+   <div class="row"><input id="vi" type="number" placeholder="Researcher ID"></div><div class="row"><select id="vz"></select></div>
+   <div class="row"><button class="b" id="vgo">Verify access</button></div>
+   <p class="note">Rules, in order: lockdown, record exists (AVL search), active status, no deny on the path, a grant on the zone or an ancestor (inheritance), clearance &ge; zone level.</p></div>
+  <div class="card"><h2>Decision trail</h2><div id="vout" class="s">Submit a request to see each check.</div></div>
+ </div>
+</section>
+
+<section id="cmp">
+ <span class="tag">LIMITATION OVERCOME</span><h1>Plain BST vs AVL tree</h1>
+ <p class="s">The same researcher IDs are inserted into both trees. An ordinary BST degrades into a chain on sorted input. The AVL tree rotates to stay balanced.</p>
+ <div class="stats"><div class="stat"><b id="hb">0</b><span>BST height</span></div><div class="stat"><b id="ha">0</b><span>AVL height</span></div><div class="stat"><b id="rot">0</b><span>AVL rotations</span></div><div class="stat"><b id="n2">0</b><span>Nodes in each</span></div></div>
+ <div class="card"><div class="row"><input id="si" type="number" placeholder="Search ID"><button class="b" id="sgo">Search both trees</button><span id="sres" class="note"></span></div></div>
+ <div class="grid" style="margin-top:16px"><div class="card"><h2>Ordinary BST</h2><div class="scroll" id="svb"></div></div><div class="card"><h2>AVL tree (balanced)</h2><div class="scroll" id="sva"></div></div></div>
+</section>
+</main>
+<footer>SecureCore &bull; Demo for coursework. No real biometric or building access is connected.</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
